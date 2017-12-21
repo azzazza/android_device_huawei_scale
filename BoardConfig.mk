@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2016 The CyanogenMod Project
+# Copyright (C) 2017 The LineageOS Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,21 +12,122 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# config.mk
-#
-# Product-specific compile-time definitions.
-#
 
-# inherit from msm8916-common
--include device/huawei/msm8916-common/BoardConfigCommon.mk
+include device/huawei/msm8909-common/BoardConfigCommon.mk
 
-DEVICE_PATH := device/huawei/cherry
+DEVICE_PATH := device/huawei/scale
+
+# Audio
+USE_XML_AUDIO_POLICY_CONF := 1
 
 # Assert
-TARGET_OTA_ASSERT_DEVICE := c8817d,g620s,C8817D,C8817E,G621-TL00,G620S-UL00,G620S-L01,Che1-CL20,Che1-L04
+TARGET_OTA_ASSERT_DEVICE := Honor4a,honor4a,Honor4A,honor4A,y6,Y6,scale,Scale,SCL-AL00,SCL-CL00,SCL-L01,SCL-L02,SCL-L03,SCL-L04,SCL-L21,SCL-TL00,SCL-TL10,SCL-U03,SCL-U21,SCL-U23,SCL-U31,SCC-U21
 
-# Releasetools
-TARGET_RELEASETOOLS_EXTENSIONS := $(DEVICE_PATH)/releasetools
+# Bluetooth
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(DEVICE_PATH)/bluetooth
+
+# Camera
+TARGET_HAS_LEGACY_CAMERA_HAL1 := true
+USE_DEVICE_SPECIFIC_CAMERA := true
+BOARD_USES_LEGACY_MMAP := true
+TARGET_NEEDS_PLATFORM_TEXT_RELOCATIONS := true
+TARGET_USE_VENDOR_CAMERA_EXT := true
+BOARD_GLOBAL_CFLAGS += -DCAMERA_VENDOR_L_COMPAT
+
+# Charger
+BOARD_CHARGER_DISABLE_INIT_BLANK := true
+BOARD_CHARGER_ENABLE_SUSPEND := true
+
+# CMHW
+BOARD_HARDWARE_CLASS += \
+    $(DEVICE_PATH)/cmhw
+TARGET_TAP_TO_WAKE_NODE := "/sys/touch_screen/easy_wakeup_gesture"
+
+# Flags
+BOARD_NO_SECURE_DISCARD := true
+
+# Memory
+MALLOC_SVELTE := true
+
+# GPS
+TARGET_NO_RPC := true
+USE_DEVICE_SPECIFIC_GPS := true
+
+# Graphics
+TARGET_USE_COMPAT_GRALLOC_ALIGN := true
+
+# Init
+TARGET_LIBINIT_MSM8909_DEFINES_FILE := $(DEVICE_PATH)/init/init_scale.cpp
+
+# Kernel
+TARGET_KERNEL_SOURCE := kernel/huawei/msm8909
+TARGET_KERNEL_CONFIG := scale_defconfig
+
+# Lights
+TARGET_PROVIDES_LIBLIGHT := true
+
+# Partitions
+TARGET_USERIMAGES_USE_EXT4 := true
+BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_PERSISTIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_BOOTIMAGE_PARTITION_SIZE := 0x01400000 # (20M)
+BOARD_RECOVERYIMAGE_PARTITION_SIZE := 0x01900000 # (25M)
+BOARD_SYSTEMIMAGE_PARTITION_SIZE := 1288491008
+BOARD_USERDATAIMAGE_PARTITION_SIZE := 1860648960
+BOARD_CACHEIMAGE_PARTITION_SIZE := 268435456
+BOARD_PERSISTIMAGE_PARTITION_SIZE := 33554432
+BOARD_FLASH_BLOCK_SIZE := 131072 # (BOARD_KERNEL_PAGESIZE * 64)
+
+# Properties
+TARGET_SYSTEM_PROP := $(DEVICE_PATH)/system.prop
+
+# Recovery
+TARGET_RECOVERY_DEVICE_DIRS += $(DEVICE_PATH)
+
+#RECOVERY_VARIANT := twrp
+ifneq ($(RECOVERY_VARIANT),twrp)
+TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery/recovery.fstab
+else
+TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery/twrp.fstab
+RECOVERY_GRAPHICS_FORCE_USE_LINELENGTH := true
+DEVICE_RESOLUTION := 720x1280
+RECOVERY_SDCARD_ON_DATA := true
+TW_USE_TOOLBOX := true
+TW_NEW_ION_HEAP := true
+TW_BRIGHTNESS_PATH := "/sys/class/leds/lcd-backlight/brightness"
+TW_TARGET_USES_QCOM_BSP := true
+TW_EXTRA_LANGUAGES := true
+TW_INPUT_BLACKLIST := "accelerometer\x0alis3dh-accel"
+TARGET_RECOVERY_QCOM_RTC_FIX := true
+BOARD_SUPPRESS_SECURE_ERASE := true
+TW_INCLUDE_CRYPTO := true
+TARGET_RECOVERY_PIXEL_FORMAT := "RGBA_8888"
+TW_NO_SCREEN_TIMEOUT := true
+endif
+
+# RIL
+BOARD_GLOBAL_CFLAGS += -DUSE_RIL_VERSION_11
+
+# SELinux
+BOARD_SEPOLICY_DIRS += \
+    $(DEVICE_PATH)/sepolicy
+
+# Sensors
+USE_SENSOR_MULTI_HAL := true
+
+# Wifi
+TARGET_PROVIDES_WCNSS_QMI := true
+
+# dexopt
+ifeq ($(HOST_OS),linux)
+    ifeq ($(TARGET_BUILD_VARIANT),user)
+        ifeq ($(WITH_DEXPREOPT),)
+            WITH_DEXPREOPT := true
+            WITH_DEXPREOPT_BOOT_IMG_ONLY ?= true
+        endif
+    endif
+endif
 
 # inherit from the proprietary version
--include vendor/huawei/cherry/BoardConfigVendor.mk
+-include vendor/huawei/msm8909-common/BoardConfigVendor.mk
+-include vendor/huawei/scale/BoardConfigVendor.mk
