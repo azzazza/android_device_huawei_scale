@@ -83,7 +83,6 @@ TARGET_SYSTEM_PROP := $(DEVICE_PATH)/system.prop
 
 # Recovery
 TARGET_RECOVERY_DEVICE_DIRS += $(DEVICE_PATH)
-
 #RECOVERY_VARIANT := twrp
 ifneq ($(RECOVERY_VARIANT),twrp)
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery/recovery.fstab
@@ -129,5 +128,4 @@ ifeq ($(HOST_OS),linux)
 endif
 
 # inherit from the proprietary version
--include vendor/huawei/msm8909-common/BoardConfigVendor.mk
 -include vendor/huawei/scale/BoardConfigVendor.mk

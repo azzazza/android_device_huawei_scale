@@ -14,7 +14,6 @@
 # limitations under the License.
 
 $(call inherit-product-if-exists, vendor/huawei/scale/scale-vendor.mk)
-$(call inherit-product-if-exists, vendor/huawei/msm8909-common/msm8909-common-vendor.mk)
 
 LOCAL_PATH := device/huawei/scale
 

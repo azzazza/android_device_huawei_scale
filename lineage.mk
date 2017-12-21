@@ -22,10 +22,11 @@ $(call inherit-product, device/huawei/scale/device.mk)
 # Inherit some common LineageOS stuff.
 $(call inherit-product, vendor/cm/config/common_full_phone.mk)
 
+PRODUCT_RELEASE_NAME := namath
 PRODUCT_DEVICE := scale
 PRODUCT_NAME := lineage_scale
 PRODUCT_BRAND := Huawei
-PRODUCT_MODEL := scale
+PRODUCT_MODEL := Huawei Y6
 PRODUCT_MANUFACTURER := HUAWEI
 
 PRODUCT_GMS_CLIENTID_BASE := android-huawei
